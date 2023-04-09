@@ -64,7 +64,6 @@ var platforms;
 
 function create ()
 {
-
     const map = this.make.tilemap({key: 'map'});
     const tileset = map.addTilesetImage ('RPG Nature Tileset' , 'tiles',32,32,0,0);
     const layer1 = map.createStaticLayer('Tile Layer 1', 'tileset',0,0);
@@ -73,7 +72,6 @@ function create ()
 
 
     player = this.physics.add.sprite(100, 450, 'dude');
-
 
 
     this.anims.create({
@@ -95,23 +93,23 @@ function create ()
         frameRate: 10,
         repeat: -1
     });
-
 }
 
 function update ()
 {
-
+    // movement
     keys = this.input.keyboard.addKeys("W,A,S,D");
+    player.setVelocity(0) // player doesnt move
     if (keys.A.isDown) {
-        player.setVelocityX(-50)
+    player.setVelocityX(-200) // move left
   } else if (keys.D.isDown) {
-    player.setVelocityX(50);
+    player.setVelocityX(200); // move right
   }
 
   if (keys.W.isDown) {
-    player.setVelocityY(-50);
+    player.setVelocityY(-200); // move up
   } else if (keys.S.isDown) {
-    player.setVelocityY(50);
+    player.setVelocityY(200); // move down
   }
 
 }
