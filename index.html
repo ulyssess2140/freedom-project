@@ -103,30 +103,19 @@ function create ()
 
 function update ()
 {
-    cursors = this.input.keyboard.createCursorKeys();
-    if (cursors.left.isDown)
-{
-    player.setVelocityX(-160);
+    keys = this.input.keyboard.addKeys("W,A,S,D");
+    player.setVelocity(0) // player doesnt move
+    if (keys.A.isDown) {
+    player.setVelocityX(-200) // move left
+  } else if (keys.D.isDown) {
+    player.setVelocityX(200); // move right
+  }
 
-    player.anims.play('left', true);
-}
-else if (cursors.right.isDown)
-{
-    player.setVelocityX(160);
-
-    player.anims.play('right', true);
-}
-else
-{
-    player.setVelocityX(0);
-
-    player.anims.play('turn');
-}
-
-if (cursors.up.isDown && player.body.touching.down)
-{
-    player.setVelocityY(-330);
- }
+  if (keys.W.isDown) {
+    player.setVelocityY(-200); // move up
+  } else if (keys.S.isDown) {
+    player.setVelocityY(200); // move down
+  }
 }
     </script>
 
