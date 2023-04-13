@@ -68,7 +68,7 @@ var WorldScene = new Phaser.Class({
         // this.load.image('ground', 'assets/platform.png');
         // this.load.image('star', 'assets/orb2.png');
         // this.load.image('bomb', 'assets/bomb.png');
-        this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32.1 });
+        this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32 });
         this.load.image('heathempty','assets/heath/empty2.png');
         this.load.image('heath0hit',heathbar[0]);
         this.load.image('heath1hit',heathbar[1]);
@@ -143,11 +143,19 @@ var WorldScene = new Phaser.Class({
             repeat: -1
         });
         this.anims.create({
+            key: 'attack',
+            frames: this.anims.generateFrameNumbers('player', {frames: [65,66,67,68,69,70]}),
+            frameRate: 0.5,
+            repeat: -1
+
+        })
+        this.anims.create({
             key: 'jellyfish',
             frames: this.anims.generateFrameNumbers('floter', {frames: [ 0,1,2,3,4]}),
             frameRate:15,
             repeat: -1
         });
+
 
         // where the enemies will be
         this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
@@ -186,7 +194,7 @@ var WorldScene = new Phaser.Class({
     update: function (time, delta)
     {
     //    this.controls.update(delta);
-    keys = this.input.keyboard.addKeys("W,A,S,D");
+    keys = this.input.keyboard.addKeys("W,A,S,D,N");
     this.player.body.setVelocity(0);
     if (keys.A.isDown) {
         this.player.body.setVelocityX(-80) // move left
@@ -212,6 +220,9 @@ var WorldScene = new Phaser.Class({
         this.player.anims.play('right', true);
         this.player.flipX = false;
     }
+    // else if(keys.N.isDown) {
+    //     this.player.anims.play('attack', true);
+    // }
     else
     {
         this.player.anims.play('idle', true)
