@@ -159,11 +159,19 @@ function create ()
         repeat: -1
     });
 
-}
+    this.anims.create({
+         key: 'attack',
+         frames: this.anims.generateFrameNames('player',  {frames: [43,44,45,46]}),
+         frameRate: 0.5,
+         repeat: -1
+
+
+    })
 
 function update (){
     // movement
     keys = this.input.keyboard.addKeys("W,A,S,D");
+    keys = this.input.keyboard.addKeys("N");
 
     player.setVelocity(0) // player doesnt move
     player.anims.play('idle',true);
@@ -180,6 +188,10 @@ function update (){
         player.setVelocityY(-200); // move up
     } else if (keys.S.isDown) {
         player.setVelocityY(200); // move down
+    }
+
+     if(keys.N.isDown) {
+        player.anims.play('attack', true);
     }
 
     let heath0hit = this.add.image(125, 25, 'heath0hit');
@@ -328,7 +340,10 @@ function update (){
         heath = this.add.image(125, 2, 'heathempty');
         heath.setScale(1.75);
     }
+  }
 }
+
+
 
     </script>
 
