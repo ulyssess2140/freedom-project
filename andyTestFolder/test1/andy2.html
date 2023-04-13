@@ -23,6 +23,7 @@
 ======= -->
 <head>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+    <script src="js/phaser.min.js"></script>
 
 </head>
 <body>
@@ -90,6 +91,7 @@ function preload ()
     this.load.image('heath7hit',heathbar[7]);
     this.load.image('heath8hit',heathbar[8]);
     console.log(heathbar[0])
+    this.load.spritesheet('floter','assets/floter.png',{ frameWidth: 11, frameHeight: 11 });
 }
 var playerHit
 function create ()
@@ -104,6 +106,8 @@ function create ()
 
     player = this.physics.add.sprite(100, 450, 'player');
     player.setScale(1.75);
+
+    this.enemy = this.physics.add.sprite(100, 450, 'floter');
 
     heath = this.add.image(125, 2, 'heathempty');
     // var heath = this.add.image(125, 90, 'heathcomplete');
@@ -175,16 +179,22 @@ function create ()
         frameRate: 0.5,
         repeat: -1
     });
-
+    this.anims.create({
+        key: 'jellyfish',
+        frames: this.anims.generateFrameNumbers('floter', {frames: [ 0,1,2,3,4]}),
+        frameRate:15,
+        repeat: -1
+    });
 
      // where the enemies will be
-      var spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
-        for(var i = 0; i < 10; i++) {
-            var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-            var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-            // parameters are x, y, width, height
-            spawns.create(x, y, 20, 20);
-        }
+     var spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
+
+        // for(var i = 0; i < 10; i++) {
+        //     var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+        //     var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+        //     // parameters are x, y, width, height
+        //     spawns.create( x, y,50,50)
+        // }
 
         // add collider
         // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
@@ -213,20 +223,26 @@ function create ()
         // this.input.on('pointerdown', function () {
         //     this.cameras.main.flash();
         // }, this);
-
-
-        // start battle
         }
     }
 
-
+function enemyFollows () {
+        this.physics.moveToObject(this.enemy, this.player, 100);
+    }
 
 function update (){
-    // movement
-    keys = this.input.keyboard.addKeys("W,A,S,D");
+    enemyFollows();
 
-    player.setVelocity(0) // player doesnt move
+    // movement
+    
+
+    // player doesnt move
+    player.setVelocity(0)
     player.anims.play('idle',true);
+
+    // floater.setVelocity(0)
+    // floater.anims.play('jellyfish',true);
+
     if (keys.A.isDown) {
         player.setVelocityX(-200) // move left
         player.anims.play('left', true);
