@@ -69,6 +69,7 @@ var WorldScene = new Phaser.Class({
         // this.load.image('star', 'assets/orb2.png');
         // this.load.image('bomb', 'assets/bomb.png');
         this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('enemy','assets/enemy.png',{ frameWidth: 32, frameHeight: 32 });
         this.load.image('heathempty','assets/heath/empty2.png');
         this.load.image('heath0hit',heathbar[0]);
         this.load.image('heath1hit',heathbar[1]);
@@ -101,6 +102,11 @@ var WorldScene = new Phaser.Class({
         // our player sprite created through the phycis system
         this.player = this.physics.add.sprite(50, 100, 'player', 6);
         this.player.setScale(0.75);
+
+        // enemy assets
+        const enemies = this.physics.add.group();
+        enemies.create(50, 100, 'enemy');
+
 
         // don't go out of the map
         this.physics.world.bounds.width = map.widthInPixels;
@@ -158,15 +164,20 @@ var WorldScene = new Phaser.Class({
 
 
         // where the enemies will be
+        // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
         this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
+
+
         for(var i = 0; i < 30; i++) {
             var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
             var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
             // parameters are x, y, width, height
-            this.spawns.create(x, y, 20, 20);
+            enemies.create(x, y, 'enemy');
+            // this.spawns.create(x, y, 20, 20);
         }
         // add collider
-        this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
+        // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
+        this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
     },
     onMeetEnemy: function(player, zone) {
         // we move the zone to some other location
