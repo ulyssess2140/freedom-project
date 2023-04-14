@@ -160,7 +160,9 @@ function create ()
     });
     this.anims.create({
         key: 'attack',
-        frames: this.anims.generateFrameNumbers('player', {frames: [1, 50, 55, 60]}),
+
+        frames: this.anims.generateFrameNumbers('player', {frames: [65,66,67,68,69,70]}),
+
         frameRate: 0.5,
         repeat: -1
 
@@ -183,14 +185,15 @@ function update (){
         player.anims.play('right', true);
         player.flipX = false;
     }
+    else if(keys.N.isDown) {
+        player.anims.play('attack', true);
+    }
     if (keys.W.isDown) {
         player.setVelocityY(-200); // move up
     } else if (keys.S.isDown) {
         player.setVelocityY(200); // move down
     }
-    if(keys.N.isDown) {
-        player.anims.play('attack', true);
-    }
+
 
     let heath0hit = this.add.image(125, 25, 'heath0hit');
     let heath1hit = this.add.image(125, 25, 'heath1hit');
@@ -222,59 +225,7 @@ function update (){
     testDamage7 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
     testDamage8 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
     testempty = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
-    //heath system prototype
-    // if (Phaser.Input.Keyboard.JustDown (testGain)){
-    //     heath0hit.setScale(1.75);
-    //     heath0hit.visible = true;
-    // }
-    // else if (Phaser.Input.Keyboard.JustDown (testempty)){
-    //     heath0hit.visible = false;
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    // }
-    // else if (Phaser.Input.Keyboard.JustDown (testDamage1)){
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    //     let heath1hit = this.add.image(125, 25, 'heath1hit');
-    //     heath1hit.setScale(1.75);
-    // }
-    // else if (Phaser.Input.Keyboard.JustDown (testDamage2)){
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    //     let heath2hit = this.add.image(125, 25, 'heath2hit');
-    //     heath2hit.setScale(1.75);
-    // }
 
-    // else if (Phaser.Input.Keyboard.JustDown (testDamage4)){
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    //     let heath4hit = this.add.image(125, 25, 'heath4hit');
-    //     heath4hit.setScale(1.75);
-    // }
-    // else if (Phaser.Input.Keyboard.JustDown (testDamage5)){
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    //     let heath5hit = this.add.image(125, 25, 'heath5hit');
-    //     heath5hit.setScale(1.75);
-    // }
-    // else if (Phaser.Input.Keyboard.JustDown (testDamage6)){
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    //     let heath6hit = this.add.image(125, 25, 'heath6hit');
-    //     heath6hit.setScale(1.75);
-    // }
-    // else if (Phaser.Input.Keyboard.JustDown (testDamage7)){
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    //     let heath7hit = this.add.image(125, 25, 'heath7hit');
-    //     heath7hit.setScale(1.75);
-    // }
-    // else if (Phaser.Input.Keyboard.JustDown (testDamage8)){
-    //     heath = this.add.image(125, 2, 'heathempty');
-    //     heath.setScale(1.75);
-    //     let heath8hit = this.add.image(125, 25, 'heath8hit');
-    //     heath8hit.setScale(1.75);
-    // }
     //newheath system
     if (Phaser.Input.Keyboard.JustDown (testDamage1)){
         playerHit+=1
