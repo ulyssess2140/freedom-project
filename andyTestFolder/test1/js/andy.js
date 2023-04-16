@@ -1,3 +1,42 @@
+var BootScene = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize:
+    function BootScene ()
+    {
+        Phaser.Scene.call(this, { key: 'BootScene' });
+    },
+    preload: function ()
+    {
+        // map tiles
+        this.load.image('tiles', 'assets/map/spritesheet.png');
+        // map in json format
+        this.load.tilemapTiledJSON('map', 'assets/map/map.json');
+        // our two characters
+        // this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32.1 });
+    },
+    create: function ()
+    {
+        // start the WorldScene
+        this.scene.start('WorldScene');
+    }
+});
+var heathbar =[]
+heathbar.push(src='assets/heath/0Hit_healthbar.png');
+// let heath1hit = this.add.image(75, 25, 'heath1hit');
+heathbar.push(src='assets/heath/1Hit_healthbar.png');
+// let heath2hit = this.add.image(75, 25, 'heath2hit');
+heathbar.push(src='assets/heath/2Hit_healthbar.png');
+// let heath3hit = this.add.image(75, 25, 'heath3hit');
+heathbar.push(src='assets/heath/3Hit_healthbar.png');
+// let heath4hit = this.add.image(75, 25, 'heath4hit');
+heathbar.push(src='assets/heath/4Hit_healthbar.png');
+// let heath5hit = this.add.image(75, 25, 'heath5hit');
+heathbar.push(src='assets/heath/5Hit_healthbar.png');
+// let heath6hit = this.add.image(75, 25, 'heath6hit');
+heathbar.push(src='assets/heath/6Hit_healthbar.png');
+// let heath7hit = this.add.image(75, 25, 'heath7hit');
+heathbar.push(src='assets/heath/7Hit_healthbar.png');
 // let heath8hit = this.add.image(75, 25, 'heath8hit');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
@@ -6,6 +45,16 @@ var playerHit = 0
 var WorldScene = new Phaser.Class({
 
     Extends: Phaser.Scene,
+
+
+
+
+
+
+
+
+    @@ -69,6 +71,7 @@ var WorldScene = new Phaser.Class({
+
     initialize:
     function WorldScene ()
     {
@@ -24,6 +73,16 @@ var WorldScene = new Phaser.Class({
         this.load.image('heathempty','assets/heath/empty2.png');
         this.load.image('heath0hit',heathbar[0]);
         this.load.image('heath1hit',heathbar[1]);
+
+
+
+
+
+
+
+
+    @@ -80,7 +83,6 @@ var WorldScene = new Phaser.Class({
+
         this.load.image('heath2hit',heathbar[2]);
         this.load.image('heath3hit',heathbar[3]);
         this.load.image('heath4hit',heathbar[4]);
@@ -35,6 +94,16 @@ var WorldScene = new Phaser.Class({
     },
 
     create: function ()
+
+
+
+
+
+
+
+
+    @@ -102,6 +104,13 @@ var WorldScene = new Phaser.Class({
+
     {
         // create the map
         var map = this.make.tilemap({ key: 'map' });
@@ -59,6 +128,21 @@ var WorldScene = new Phaser.Class({
         // don't go out of the map
         this.physics.world.bounds.width = map.widthInPixels;
         this.physics.world.bounds.height = map.heightInPixels;
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @@ -158,16 +167,27 @@ var WorldScene = new Phaser.Class({
+
         this.player.setCollideWorldBounds(true);
         // don't walk on trees
         this.physics.add.collider(this.player, obstacles);
