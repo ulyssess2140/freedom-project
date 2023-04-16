@@ -49,8 +49,6 @@ heathbar.push(src='assets/heath/7Hit_healthbar.png');
 // let heath8hit = this.add.image(75, 25, 'heath8hit');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
-
-
 var WorldScene = new Phaser.Class({
 
     Extends: Phaser.Scene,
@@ -77,6 +75,7 @@ var WorldScene = new Phaser.Class({
         this.load.image('heath7hit',heathbar[7]);
         this.load.image('heath8hit',heathbar[8]);
         console.log(heathbar[0])
+        this.load.spritesheet('floter','assets/floter.png',{ frameWidth: 11, frameHeight: 11 });
     },
 
     create: function ()
