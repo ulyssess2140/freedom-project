@@ -103,7 +103,7 @@ var WorldScene = new Phaser.Class({
         this.player.setScale(0.75);
 
         // // enemy assets
-        this.missileGroup = this.game.add.group();
+
 
 
         // don't go out of the map
@@ -230,22 +230,22 @@ var WorldScene = new Phaser.Class({
     }
 
     //enemy spawn
-    if (this.missileGroup.countLiving() < this.MAX_MISSILES) {
-        // Set the launch point to a random location below the bottom edge
-        // of the stage
-        this.launchMissile(this.game.rnd.integerInRange(50, this.game.width-50),
-            this.game.height + 50);
-    }
+    // if (this.missileGroup.countLiving() < this.MAX_MISSILES) {
+    //     // Set the launch point to a random location below the bottom edge
+    //     // of the stage
+    //     this.launchMissile(this.game.rnd.integerInRange(50, this.game.width-50),
+    //         this.game.height + 50);
+    // }
 
-    // If any missile is within a certain distance of the mouse pointer, blow it up
-    this.missileGroup.forEachAlive(function(m) {
-        var distance = this.game.math.distance(m.x, m.y,
-            this.game.input.activePointer.x, this.game.input.activePointer.y);
-        if (distance < 50) {
-            m.kill();
-            this.getExplosion(m.x, m.y);
-        }
-    }, this);
+    // // If any missile is within a certain distance of the mouse pointer, blow it up
+    // this.missileGroup.forEachAlive(function(m) {
+    //     var distance = this.game.math.distance(m.x, m.y,
+    //         this.game.input.activePointer.x, this.game.input.activePointer.y);
+    //     if (distance < 50) {
+    //         m.kill();
+    //         this.getExplosion(m.x, m.y);
+    //     }
+    // }, this);
 
     //newheath system
     const container0 = this.add.container(0, 0);
