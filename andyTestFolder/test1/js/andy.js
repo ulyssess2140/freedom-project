@@ -50,9 +50,6 @@ heathbar.push(src='assets/heath/7Hit_healthbar.png');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
 
-var GameState = function(game) {
-
-};
 
 var WorldScene = new Phaser.Class({
 
@@ -80,7 +77,6 @@ var WorldScene = new Phaser.Class({
         this.load.image('heath7hit',heathbar[7]);
         this.load.image('heath8hit',heathbar[8]);
         console.log(heathbar[0])
-        this.load.spritesheet('floter','assets/floter.png',{ frameWidth: 11, frameHeight: 11 });
     },
 
     create: function ()
@@ -101,10 +97,6 @@ var WorldScene = new Phaser.Class({
         // our player sprite created through the phycis system
         this.player = this.physics.add.sprite(50, 100, 'player', 6);
         this.player.setScale(0.75);
-
-        // // enemy assets
-
-
 
         // don't go out of the map
         this.physics.world.bounds.width = map.widthInPixels;
