@@ -81,6 +81,7 @@ var WorldScene = new Phaser.Class({
         this.load.image('heath7hit',heathbar[7]);
         this.load.image('heath8hit',heathbar[8]);
         console.log(heathbar[0])
+        this.load.spritesheet('floter','assets/floter.png',{ frameWidth: 11, frameHeight: 11 });
     },
 
     create: function ()
@@ -154,6 +155,12 @@ var WorldScene = new Phaser.Class({
             repeat: -1
 
         })
+        this.anims.create({
+            key: 'jellyfish',
+            frames: this.anims.generateFrameNumbers('floter', {frames: [ 0,1,2,3,4]}),
+            frameRate:15,
+            repeat: -1
+        });
 
 
         // where the enemies will be
