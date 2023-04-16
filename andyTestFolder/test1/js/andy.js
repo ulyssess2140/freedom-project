@@ -50,6 +50,9 @@ heathbar.push(src='assets/heath/7Hit_healthbar.png');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
 
+var GameState = function(game) {
+
+};
 
 var WorldScene = new Phaser.Class({
 
@@ -64,12 +67,7 @@ var WorldScene = new Phaser.Class({
 
     preload: function ()
     {
-        // this.load.image('tiles','./assets/RPG Nature Tileset.png');
-        // this.load.tilemapTiledJSON('map1','./assets/map1.json');
         this.load.image('sky', 'assets/backupPng/sky.png');
-        // this.load.image('ground', 'assets/platform.png');
-        // this.load.image('star', 'assets/orb2.png');
-        // this.load.image('bomb', 'assets/bomb.png');
         this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet('enemy','assets/enemy.png',{ frameWidth: 32, frameHeight: 32 });
         this.load.image('heathempty','assets/heath/empty2.png');
@@ -83,6 +81,7 @@ var WorldScene = new Phaser.Class({
         this.load.image('heath7hit',heathbar[7]);
         this.load.image('heath8hit',heathbar[8]);
         console.log(heathbar[0])
+        this.load.spritesheet('floter','assets/floter.png',{ frameWidth: 11, frameHeight: 11 });
     },
 
     create: function ()
@@ -104,11 +103,8 @@ var WorldScene = new Phaser.Class({
         this.player = this.physics.add.sprite(50, 100, 'player', 6);
         this.player.setScale(0.75);
 
-        // enemy assets
-        const enemies = this.physics.add.group();
-        // enemies.create(50, 100, 'enemy');
-        enemies.create(360 + Math.random() * 200, 120 + Math.random() * 200, 'enemy')
-
+        // // enemy assets
+        this.missileGroup = this.game.add.group();
 
 
         // don't go out of the map
@@ -168,26 +164,20 @@ var WorldScene = new Phaser.Class({
 
         // where the enemies will be
         // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
-        this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
+        // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
 
 
-        for(var i = 0; i < 15; i++) {
-            var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-            var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-            // parameters are x, y, width, height
-            enemies.create(x, y, 'enemy');
-            this.enemy = this.physics.add.sprite(x, y, 'enemy');
-        }
-        // add collider
-        // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
-        this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
-        this.physics.add.overlap(this.player, this.enemy, this.onMeetEnemy, false, this);
-
-        // this.physics.moveToObject(enemies, this.player, 100 )
-
+        // for(var i = 0; i < 30; i++) {
+        //     var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+        //     var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+        //     // parameters are x, y, width, height
+        //     enemies.create(x, y, 'enemy');
+        //     // this.spawns.create(x, y, 20, 20);
+        // }
+        // // add collider
+        // // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
+        // this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
     },
-
-
     onMeetEnemy: function(player, zone) {
         // we move the zone to some other location
         zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
@@ -207,17 +197,13 @@ var WorldScene = new Phaser.Class({
         // this.input.on('pointerdown', function () {
         //     this.cameras.main.flash();
         // }, this);
-        this.cameras.main.flash(500)
-    },
-    enemyFollows: function () {
-        this.physics.moveToObject(this.enemy, this.player, 75);
+        this.cameras.main.flash(500);
+
     },
 
     update: function (time, delta)
     {
-
-    // this.controls.update(delta);
-    this.enemyFollows();
+    //    this.controls.update(delta);
     keys = this.input.keyboard.addKeys("W,A,S,D,N");
     this.player.body.setVelocity(0);
     if (keys.A.isDown) {
@@ -244,14 +230,30 @@ var WorldScene = new Phaser.Class({
         this.player.anims.play('right', true);
         this.player.flipX = false;
     }
-    // else if(keys.N.isDown) {
-    //     this.player.anims.play('attack', true);
-    // }
     else
     {
         this.player.anims.play('idle', true)
     }
 
+    //enemy spawn
+    if (this.missileGroup.countLiving() < this.MAX_MISSILES) {
+        // Set the launch point to a random location below the bottom edge
+        // of the stage
+        this.launchMissile(this.game.rnd.integerInRange(50, this.game.width-50),
+            this.game.height + 50);
+    }
+
+    // If any missile is within a certain distance of the mouse pointer, blow it up
+    this.missileGroup.forEachAlive(function(m) {
+        var distance = this.game.math.distance(m.x, m.y,
+            this.game.input.activePointer.x, this.game.input.activePointer.y);
+        if (distance < 50) {
+            m.kill();
+            this.getExplosion(m.x, m.y);
+        }
+    }, this);
+
+    //newheath system
     const container0 = this.add.container(0, 0);
     container0.add(this.add.image(75, 0, 'heathempty'));
     container0.setScrollFactor(0);
@@ -260,7 +262,7 @@ var WorldScene = new Phaser.Class({
     heath0hit.setScrollFactor(0);
 
     testheal = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
-    //newheath system
+
     if (Phaser.Input.Keyboard.JustDown (testheal)){
         playerHit = 0
     }
