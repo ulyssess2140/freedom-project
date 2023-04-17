@@ -49,6 +49,8 @@ heathbar.push(src='assets/heath/7Hit_healthbar.png');
 // let heath8hit = this.add.image(75, 25, 'heath8hit');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
+
+
 var WorldScene = new Phaser.Class({
 
     Extends: Phaser.Scene,
@@ -81,7 +83,6 @@ var WorldScene = new Phaser.Class({
         this.load.image('heath7hit',heathbar[7]);
         this.load.image('heath8hit',heathbar[8]);
         console.log(heathbar[0])
-        this.load.spritesheet('floter','assets/floter.png',{ frameWidth: 11, frameHeight: 11 });
     },
 
     create: function ()
@@ -105,7 +106,9 @@ var WorldScene = new Phaser.Class({
 
         // enemy assets
         const enemies = this.physics.add.group();
-        enemies.create(50, 100, 'enemy');
+        // enemies.create(50, 100, 'enemy');
+        enemies.create(360 + Math.random() * 200, 120 + Math.random() * 200, 'enemy')
+
 
 
         // don't go out of the map
@@ -165,20 +168,26 @@ var WorldScene = new Phaser.Class({
 
         // where the enemies will be
         // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
-        // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
+        this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
 
 
-        // for(var i = 0; i < 30; i++) {
-        //     var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-        //     var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-        //     // parameters are x, y, width, height
-        //     enemies.create(x, y, 'enemy');
-        //     // this.spawns.create(x, y, 20, 20);
-        // }
-        // // add collider
-        // // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
-        // this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
+        for(var i = 0; i < 15; i++) {
+            var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+            var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+            // parameters are x, y, width, height
+            enemies.create(x, y, 'enemy');
+            this.enemy = this.physics.add.sprite(x, y, 'enemy');
+        }
+        // add collider
+        // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
+        this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
+        this.physics.add.overlap(this.player, this.enemy, this.onMeetEnemy, false, this);
+
+        // this.physics.moveToObject(enemies, this.player, 100 )
+
     },
+
+
     onMeetEnemy: function(player, zone) {
         // we move the zone to some other location
         zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
@@ -198,35 +207,16 @@ var WorldScene = new Phaser.Class({
         // this.input.on('pointerdown', function () {
         //     this.cameras.main.flash();
         // }, this);
-        this.cameras.main.flash(500);
-
+        this.cameras.main.flash(500)
     },
-
-    // enemy follows
     enemyFollows: function () {
-        const enemies = this.physics.add.group();
-        // this.physics.moveToObject(enemies.create(0, 0, 'enemy'), this.player, 75);
-
-        // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
-
-
-            var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-            var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-            // parameters are x, y, width, height
-            this.enemy = enemies.create(x,y,'enemy')
-                this.physics.moveToObject(this.enemy, this.player);
-
-            // this.physics.moveToObject(enemies.create(x, y, 'enemy'), this.player);
-            // this.spawns.create(x, y, 20, 20);
-
-        // add collider
-        // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
-        this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
+        this.physics.moveToObject(this.enemy, this.player, 75);
     },
 
     update: function (time, delta)
     {
-    //    this.controls.update(delta);
+
+    // this.controls.update(delta);
     this.enemyFollows();
     keys = this.input.keyboard.addKeys("W,A,S,D,N");
     this.player.body.setVelocity(0);
