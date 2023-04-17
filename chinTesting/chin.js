@@ -171,20 +171,31 @@ var WorldScene = new Phaser.Class({
         this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
 
 
+<<<<<<< HEAD
         for(var i = 0; i < 15; i++) {
+=======
+        for(var i = 0; i < 30; i++) {
+>>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
             var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
             var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
             // parameters are x, y, width, height
             enemies.create(x, y, 'enemy');
+<<<<<<< HEAD
             this.enemy = this.physics.add.sprite(x, y, 'enemy');
+=======
+            // this.spawns.create(x, y, 20, 20);
+>>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
         }
         // add collider
         // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
         this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
+<<<<<<< HEAD
         this.physics.add.overlap(this.player, this.enemy, this.onMeetEnemy, false, this);
 
         // this.physics.moveToObject(enemies, this.player, 100 )
 
+=======
+>>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
     },
 
 
@@ -209,6 +220,7 @@ var WorldScene = new Phaser.Class({
         // }, this);
         this.cameras.main.flash(500)
     },
+<<<<<<< HEAD
     enemyFollows: function () {
         this.physics.moveToObject(this.enemy, this.player, 75);
     },
@@ -218,6 +230,12 @@ var WorldScene = new Phaser.Class({
 
     // this.controls.update(delta);
     this.enemyFollows();
+=======
+
+    update: function (time, delta)
+    {
+    //    this.controls.update(delta);
+>>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
     keys = this.input.keyboard.addKeys("W,A,S,D,N");
     this.player.body.setVelocity(0);
     if (keys.A.isDown) {
