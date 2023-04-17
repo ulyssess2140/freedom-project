@@ -1,36 +1,27 @@
 var BootScene = new Phaser.Class({
-
     Extends: Phaser.Scene,
-
     initialize:
-
     function BootScene ()
     {
         Phaser.Scene.call(this, { key: 'BootScene' });
     },
-
     preload: function ()
     {
         // map tiles
         this.load.image('tiles', 'assets/map/spritesheet.png');
-
         // map in json format
         this.load.tilemapTiledJSON('map', 'assets/map/map.json');
-
         // our two characters
         // this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
         this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32.1 });
     },
-
     create: function ()
     {
         // start the WorldScene
         this.scene.start('WorldScene');
     }
 });
-
 var heathbar =[]
-
 heathbar.push(src='assets/heath/0Hit_healthbar.png');
 // let heath1hit = this.add.image(75, 25, 'heath1hit');
 heathbar.push(src='assets/heath/1Hit_healthbar.png');
@@ -49,17 +40,16 @@ heathbar.push(src='assets/heath/7Hit_healthbar.png');
 // let heath8hit = this.add.image(75, 25, 'heath8hit');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
+
+
 var WorldScene = new Phaser.Class({
 
     Extends: Phaser.Scene,
-
     initialize:
-
     function WorldScene ()
     {
         Phaser.Scene.call(this, { key: 'WorldScene' });
     },
-
     preload: function ()
     {
         // this.load.image('tiles','./assets/RPG Nature Tileset.png');
@@ -87,25 +77,20 @@ var WorldScene = new Phaser.Class({
     {
         // create the map
         var map = this.make.tilemap({ key: 'map' });
-
         // first parameter is the name of the tilemap in tiled
         var tiles = map.addTilesetImage('spritesheet', 'tiles');
-
         // creating the layers
         var grass = map.createStaticLayer('Grass', tiles, 0, 0);
         var obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
-
         // make all tiles in obstacles collidable
         obstacles.setCollisionByExclusion([-1]);
-
         // our player sprite created through the phycis system
         this.player = this.physics.add.sprite(50, 100, 'player', 6);
         this.player.setScale(0.75);
 
         // enemy assets
         const enemies = this.physics.add.group();
-        enemies.create(360 + Math.random() * 200, 120 + Math.random() * 200, 'enemy')
-
+        // enemies.create(360 + Math.random() * 200, 120 + Math.random() * 200, 'enemy')
 
         // don't go out of the map
         this.physics.world.bounds.width = map.widthInPixels;
@@ -119,15 +104,15 @@ var WorldScene = new Phaser.Class({
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
         this.cameras.main.roundPixels = true;
+
         // user input
+
         this.cursors = this.input.keyboard.createCursorKeys();
 
         //heathbar
         const container0 = this.add.container(0, 0);
         container0.add(this.add.image(75, 0, 'heathempty'));
         container0.setScrollFactor(0);
-
-
         //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
         this.anims.create({
             key: 'idle',
@@ -152,20 +137,18 @@ var WorldScene = new Phaser.Class({
             frames: this.anims.generateFrameNumbers('player', {frames: [65,66,67,68,69,70]}),
             frameRate: 0.5,
             repeat: -1
-
         })
-
         // where the enemies will be
         // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
-        this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
+        // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
 
-
-        for(var i = 0; i < 20; i++) {
+        this.enemy = this.physics.add.sprite(x, y, 'enemy');
+        for(var i = 0; i < 15; i++) {
             var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
             var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
             // parameters are x, y, width, height
             enemies.create(x, y, 'enemy');
-            this.enemy = this.physics.add.sprite(x, y, 'enemy');
+
         }
         // add collider
         // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
@@ -175,20 +158,24 @@ var WorldScene = new Phaser.Class({
         // this.physics.moveToObject(enemies, this.player, 100 )
 
     },
+
+
     onMeetEnemy: function(player, zone) {
         // we move the zone to some other location
         zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
         zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
         playerHit+=1
-        this.cameras.main.flash(500);
+        this.cameras.main.flash(500)
     },
     enemyFollows: function () {
-        this.physics.moveToObject(this.enemy, this.player, 80);
+        this.physics.moveToObject(this.enemy, this.player, 75);
     },
+
     update: function (time, delta)
     {
+
+    // this.controls.update(delta);
     this.enemyFollows();
-    //    this.controls.update(delta);
     keys = this.input.keyboard.addKeys("W,A,S,D,N");
     this.player.body.setVelocity(0);
     if (keys.A.isDown) {
@@ -203,7 +190,6 @@ var WorldScene = new Phaser.Class({
     } else if (keys.S.isDown) {
         this.player.body.setVelocityY(80); // move down
     }
-
     // Update the animation last and give left/right animations precedence over up/down animations
     if (keys.A.isDown)
     {
@@ -215,20 +201,21 @@ var WorldScene = new Phaser.Class({
         this.player.anims.play('right', true);
         this.player.flipX = false;
     }
+    // else if(keys.N.isDown) {
+    //     this.player.anims.play('attack', true);
+    // }
     else
     {
         this.player.anims.play('idle', true)
     }
-    //newheath system
     const container0 = this.add.container(0, 0);
     container0.add(this.add.image(75, 0, 'heathempty'));
     container0.setScrollFactor(0);
     let heath0hit = this.add.image(75, 12.5, 'heath0hit');
     heath0hit.visible = false;
     heath0hit.setScrollFactor(0);
-
     testheal = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
-
+    //newheath system
     if (Phaser.Input.Keyboard.JustDown (testheal)){
         playerHit = 0
     }
@@ -292,7 +279,6 @@ var WorldScene = new Phaser.Class({
         heath.setScrollFactor(0);
     }
     }
-
 });
 var config = {
     type: Phaser.AUTO,
