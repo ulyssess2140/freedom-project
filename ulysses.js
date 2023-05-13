@@ -277,7 +277,11 @@ var WorldScene = new Phaser.Class({
         heath0hit.visible = false;
         heath = this.add.image(75, 0, 'heathempty');
         heath.setScrollFactor(0);
+        
     }
+
+
+
     }
 });
 var config = {
