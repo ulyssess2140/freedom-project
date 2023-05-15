@@ -1,36 +1,27 @@
 var BootScene = new Phaser.Class({
-
     Extends: Phaser.Scene,
-
     initialize:
-
     function BootScene ()
     {
         Phaser.Scene.call(this, { key: 'BootScene' });
     },
-
     preload: function ()
     {
         // map tiles
         this.load.image('tiles', 'assets/map/spritesheet.png');
-
         // map in json format
         this.load.tilemapTiledJSON('map', 'assets/map/map.json');
-
         // our two characters
         // this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
         this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32.1 });
     },
-
     create: function ()
     {
         // start the WorldScene
         this.scene.start('WorldScene');
     }
 });
-
 var heathbar =[]
-
 heathbar.push(src='assets/heath/0Hit_healthbar.png');
 // let heath1hit = this.add.image(75, 25, 'heath1hit');
 heathbar.push(src='assets/heath/1Hit_healthbar.png');
@@ -54,14 +45,11 @@ var playerHit = 0
 var WorldScene = new Phaser.Class({
 
     Extends: Phaser.Scene,
-
     initialize:
-
     function WorldScene ()
     {
         Phaser.Scene.call(this, { key: 'WorldScene' });
     },
-
     preload: function ()
     {
         // this.load.image('tiles','./assets/RPG Nature Tileset.png');
@@ -72,6 +60,7 @@ var WorldScene = new Phaser.Class({
         // this.load.image('bomb', 'assets/bomb.png');
         this.load.spritesheet('player','assets/robePlayer.png',{ frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet('enemy','assets/enemy.png',{ frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('trap','assets/Bear_Trap.png',{ frameWidth: 32, frameHeight: 32 });
         this.load.image('heathempty','assets/heath/empty2.png');
         this.load.image('heath0hit',heathbar[0]);
         this.load.image('heath1hit',heathbar[1]);
@@ -89,27 +78,20 @@ var WorldScene = new Phaser.Class({
     {
         // create the map
         var map = this.make.tilemap({ key: 'map' });
-
         // first parameter is the name of the tilemap in tiled
         var tiles = map.addTilesetImage('spritesheet', 'tiles');
-
         // creating the layers
         var grass = map.createStaticLayer('Grass', tiles, 0, 0);
         var obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
-
         // make all tiles in obstacles collidable
         obstacles.setCollisionByExclusion([-1]);
-
         // our player sprite created through the phycis system
         this.player = this.physics.add.sprite(50, 100, 'player', 6);
         this.player.setScale(0.75);
 
         // enemy assets
-        const enemies = this.physics.add.group();
-        // enemies.create(50, 100, 'enemy');
-        enemies.create(360 + Math.random() * 200, 120 + Math.random() * 200, 'enemy')
-
-
+        const traps = this.physics.add.group();
+        // trap.create(360 + Math.random() * 200, 120 + Math.random() * 200, 'enemy')
 
         // don't go out of the map
         this.physics.world.bounds.width = map.widthInPixels;
@@ -123,15 +105,15 @@ var WorldScene = new Phaser.Class({
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
         this.cameras.main.roundPixels = true;
+
         // user input
+
         this.cursors = this.input.keyboard.createCursorKeys();
 
         //heathbar
         const container0 = this.add.container(0, 0);
         container0.add(this.add.image(75, 0, 'heathempty'));
         container0.setScrollFactor(0);
-
-
         //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
         this.anims.create({
             key: 'idle',
@@ -156,46 +138,28 @@ var WorldScene = new Phaser.Class({
             frames: this.anims.generateFrameNumbers('player', {frames: [65,66,67,68,69,70]}),
             frameRate: 0.5,
             repeat: -1
-
         })
-        this.anims.create({
-            key: 'jellyfish',
-            frames: this.anims.generateFrameNumbers('floter', {frames: [ 0,1,2,3,4]}),
-            frameRate:15,
-            repeat: -1
-        });
-
-
-        // where the enemies will be
+        // where the trap will be
         // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
-        this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
+        // this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
 
-
-<<<<<<< HEAD
+        this.enemy = this.physics.add.sprite(x, y, 'enemy');
         for(var i = 0; i < 15; i++) {
-=======
-        for(var i = 0; i < 30; i++) {
->>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
             var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
             var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
             // parameters are x, y, width, height
-            enemies.create(x, y, 'enemy');
-<<<<<<< HEAD
-            this.enemy = this.physics.add.sprite(x, y, 'enemy');
-=======
-            // this.spawns.create(x, y, 20, 20);
->>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
+            traps.create(x, y, 'trap');
+            // traps.setSize(30, 30, true);
         }
         // add collider
         // this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
-        this.physics.add.overlap(this.player, enemies, this.onMeetEnemy, false, this);
-<<<<<<< HEAD
+        this.physics.add.overlap(this.player, traps, this.onMeetEnemy, false, this);
         this.physics.add.overlap(this.player, this.enemy, this.onMeetEnemy, false, this);
+        this.enemy.setSize(10, 10, true);
+        this.player.setSize(15, 25, true);
 
-        // this.physics.moveToObject(enemies, this.player, 100 )
+        // this.physics.moveToObject(traps, this.player, 100 )
 
-=======
->>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
     },
 
 
@@ -204,23 +168,8 @@ var WorldScene = new Phaser.Class({
         zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
         zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
         playerHit+=1
-        // shake the world
-        // this.cameras.main.shake(50);
-
-        // change the effect to flash or fade.
-        //fade
-        // this.cameras.main.once('camerafadeincomplete', function (camera) {
-        //     camera.fadeOut(3000);
-        // });
-        // this.cameras.main.fadeIn(3000);
-
-        //flash
-        // this.input.on('pointerdown', function () {
-        //     this.cameras.main.flash();
-        // }, this);
         this.cameras.main.flash(500)
     },
-<<<<<<< HEAD
     enemyFollows: function () {
         this.physics.moveToObject(this.enemy, this.player, 75);
     },
@@ -230,12 +179,6 @@ var WorldScene = new Phaser.Class({
 
     // this.controls.update(delta);
     this.enemyFollows();
-=======
-
-    update: function (time, delta)
-    {
-    //    this.controls.update(delta);
->>>>>>> 69821579f6f2e1ecc724cecc503626c59d7d37a5
     keys = this.input.keyboard.addKeys("W,A,S,D,N");
     this.player.body.setVelocity(0);
     if (keys.A.isDown) {
@@ -250,7 +193,6 @@ var WorldScene = new Phaser.Class({
     } else if (keys.S.isDown) {
         this.player.body.setVelocityY(80); // move down
     }
-
     // Update the animation last and give left/right animations precedence over up/down animations
     if (keys.A.isDown)
     {
@@ -269,14 +211,12 @@ var WorldScene = new Phaser.Class({
     {
         this.player.anims.play('idle', true)
     }
-
     const container0 = this.add.container(0, 0);
     container0.add(this.add.image(75, 0, 'heathempty'));
     container0.setScrollFactor(0);
     let heath0hit = this.add.image(75, 12.5, 'heath0hit');
     heath0hit.visible = false;
     heath0hit.setScrollFactor(0);
-
     testheal = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
     //newheath system
     if (Phaser.Input.Keyboard.JustDown (testheal)){
@@ -342,7 +282,6 @@ var WorldScene = new Phaser.Class({
         heath.setScrollFactor(0);
     }
     }
-
 });
 var config = {
     type: Phaser.AUTO,
