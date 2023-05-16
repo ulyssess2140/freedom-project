@@ -19,6 +19,7 @@ var BootScene = new Phaser.Class({
     {
         // start the WorldScene
         this.scene.start('WorldScene');
+
     }
 });
 var heathbar =[]
@@ -40,6 +41,8 @@ heathbar.push(src='assets/heath/7Hit_healthbar.png');
 // let heath8hit = this.add.image(75, 25, 'heath8hit');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
+
+
 
 
 var WorldScene = new Phaser.Class({
@@ -108,6 +111,12 @@ var WorldScene = new Phaser.Class({
         // user input
 
         this.cursors = this.input.keyboard.createCursorKeys();
+
+        //game over text
+        this.gameOver = true;
+
+
+
 
         //heathbar
         const container0 = this.add.container(0, 0);
@@ -277,7 +286,9 @@ var WorldScene = new Phaser.Class({
         heath0hit.visible = false;
         heath = this.add.image(75, 0, 'heathempty');
         heath.setScrollFactor(0);
-        
+        let gameOverText = this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', {fontSize: '64px', fill: '#fff'});
+        gameOverText.setDepth(1);
+
     }
 
 
