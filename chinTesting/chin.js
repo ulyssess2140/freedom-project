@@ -19,6 +19,7 @@ var BootScene = new Phaser.Class({
     {
         // start the WorldScene
         this.scene.start('WorldScene');
+        var score = 0
     }
 });
 var heathbar =[]
@@ -280,6 +281,9 @@ var WorldScene = new Phaser.Class({
         heath0hit.visible = false;
         heath = this.add.image(75, 0, 'heathempty');
         heath.setScrollFactor(0);
+        alert('Gameover ')
+        document.location.reload()
+        noLoop();
     }
     }
 });
