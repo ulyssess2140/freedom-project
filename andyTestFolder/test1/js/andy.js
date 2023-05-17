@@ -42,7 +42,7 @@ heathbar.push(src='assets/heath/7Hit_healthbar.png');
 heathbar.push(src='assets/heath/8Hit_healthbar.png');
 var playerHit = 0
 
-
+let timer;
 var WorldScene = new Phaser.Class({
 
     Extends: Phaser.Scene,
@@ -73,6 +73,7 @@ var WorldScene = new Phaser.Class({
         this.load.image('heath7hit',heathbar[7]);
         this.load.image('heath8hit',heathbar[8]);
         console.log(heathbar[0])
+        timer = 1
     },
 
     create: function ()
@@ -304,9 +305,6 @@ var config = {
     scene: [
         BootScene,
         WorldScene
-    ]
-};
-var game = new Phaser.Game(config);
     ]
 };
 var game = new Phaser.Game(config);
